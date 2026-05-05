@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation">
+
+    <fragment
+        android:id="@+id/classify_fragment"
+        android:name="com.task82hd.Fragment.ClassifyFragment"
+        tools:layout="@layout/fragment_classify">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/history_fragment"
+        android:name="com.task82hd.Fragment.HistoryFragment"
+        tools:layout="@layout/fragment_history">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.task82hd.Fragment.SettingsFragment"
+        tools:layout="@layout/fragment_settings">
+
+    </fragment>
+
+</navigation>
