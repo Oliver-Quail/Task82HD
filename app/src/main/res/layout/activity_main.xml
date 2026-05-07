@@ -25,6 +25,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:itemBackground="@color/md_theme_surfaceContainer"
+        app:itemIconTint="@color/md_theme_primary"
+        app:itemTextColor="@color/md_theme_primary"
+        app:itemActiveIndicatorStyle="@color/md_theme_primary"
         app:menu="@menu/bottom_nav_menu"/>
 
 
