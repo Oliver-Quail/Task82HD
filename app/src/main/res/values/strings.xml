@@ -3,7 +3,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
+    <!-- Classify fragment -->
+    <string name="add_image">Add Image</string>
+    <string name="more_info">Add more information</string>
 
     <!-- Bottom Nav terms -->
     <string name="classify_nav">Classify</string>

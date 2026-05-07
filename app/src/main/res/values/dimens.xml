@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="standard_padding">10dp</dimen>
+    <dimen name="corner_radius_big">28dp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="margin_small">5dp</dimen>
+
+</resources>
