@@ -3,6 +3,12 @@
     <dimen name="standard_padding">10dp</dimen>
     <dimen name="corner_radius_big">28dp</dimen>
     <dimen name="padding_small">5dp</dimen>
+
+
+    <!-- Margins -->
     <dimen name="margin_small">5dp</dimen>
+    <dimen name="margin_large">10dp</dimen>
+
+    <dimen name="text_title">24sp</dimen>
 
 </resources>
