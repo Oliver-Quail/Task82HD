@@ -1,5 +1,6 @@
 package com.task82hd.LLMProvider;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.task82hd.LLMProvider.Providers.WebProvider;
@@ -13,11 +14,13 @@ public class LLMProvider {
     private ILLMProvider provider;
     private PROVIDERS providers;
     private boolean canExecute = false;
+    Context context;
 
-    public LLMProvider(String message, Uri image, PROVIDERS providers) {
+    public LLMProvider(String message, Uri image, PROVIDERS providers, Context context) {
         this.initalMessage = message;
         this.image = image;
         this.providers = providers;
+        this.context = context;
     }
 
     public void ititalise() {
@@ -30,7 +33,7 @@ public class LLMProvider {
             default:
                 throw new RuntimeException("Invalid provider");
         }
-        provider.initilaise(initalMessage, image);
+        provider.initilaise(initalMessage, image, context);
     }
 
     public void sendMessage(String message, Function<String, Void> callback) {
