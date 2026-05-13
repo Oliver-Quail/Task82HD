@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 import re
 import requests
 import ollama
+import base64
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "gemma4:e2b" 
@@ -12,6 +13,9 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
+def encode_image(path):
+    with open(path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 def generate_classification(text, image):
     print("Fetching quiz from Ollama")
@@ -27,7 +31,7 @@ def generate_classification(text, image):
         {
             'role': 'user',
             'content': prompt,
-            'images': ["http://192.168.50.179:5000/static/" + image]
+            'images': [encode_image(image)]
         },
     ])
 
@@ -62,7 +66,7 @@ def classify_file():
     
 
     
-    return jsonify({'classification': generate_classification("Meow", filename)}), 200
+    return jsonify({'classification': generate_classification("Meow", "./static/" + filename)}), 200
 
     
 
