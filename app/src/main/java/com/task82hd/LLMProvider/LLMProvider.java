@@ -2,6 +2,7 @@ package com.task82hd.LLMProvider;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.task82hd.LLMProvider.Providers.WebProvider;
 
@@ -13,22 +14,29 @@ public class LLMProvider {
     Uri image;
     private ILLMProvider provider;
     private PROVIDERS providers;
-    private boolean canExecute = false;
     Context context;
+    private boolean isInitalised = false;
 
-    public LLMProvider(String message, Uri image, PROVIDERS providers, Context context) {
+
+    public boolean isInitalised() {
+        return isInitalised;
+    }
+
+    public LLMProvider() {
+
+    }
+
+    public void ititalise(String message, Uri image, PROVIDERS providers, Context context) {
         this.initalMessage = message;
         this.image = image;
         this.providers = providers;
         this.context = context;
-    }
+        isInitalised = true;
 
-    public void ititalise() {
-
-        switch (providers) {
+        switch (this.providers) {
             case WEB:
+                Log.d("LLMProvider", "Inititalised web");
                 provider = new WebProvider();
-                canExecute = true;
                 break;
             default:
                 throw new RuntimeException("Invalid provider");
@@ -41,7 +49,7 @@ public class LLMProvider {
     }
 
     public void sendMessage(Function<String, Void> callback) {
-        provider.sendMessage(callback);
+        provider.sendMessage(initalMessage, callback);
     }
 
     public static enum PROVIDERS {

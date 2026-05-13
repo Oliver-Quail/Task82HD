@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.task82hd.LLMProvider.ILLMProvider;
 import com.task82hd.Model.LLMResponse;
@@ -66,20 +67,26 @@ public class WebProvider extends ILLMProvider {
 
 
             LLMWebService service = retrofit.create(LLMWebService.class);
+            RequestBody description = RequestBody.create(MultipartBody.FORM, "Image to classify");
 
-            Call<LLMResponse> result = service.classify(message, file);
+            Call<LLMResponse> result = service.classify(file, description);
 
             result.enqueue(new Callback<LLMResponse>() {
                 @Override
                 public void onResponse(Call<LLMResponse> call, Response<LLMResponse> response) {
 
                     LLMResponse llmResponse = response.body();
+                    Log.d("WebProvider", "response Recieved");
                     callback.apply(llmResponse.getClassification());
 
                 }
 
                 @Override
                 public void onFailure(Call<LLMResponse> call, Throwable t) {
+                    Log.d("WebProvider", "response failed");
+
+                    Log.d("WebProvider", t.getMessage());
+
 
                 }
             });

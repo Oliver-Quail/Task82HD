@@ -18,11 +18,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.task82hd.LLMProvider.LLMProvider;
 import com.task82hd.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Function;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -35,6 +37,8 @@ public class ClassifyFragment extends Fragment {
     ConstraintLayout addImage;
     Button classifyButton;
     TextInputEditText informationText;
+
+    LLMProvider llmProvider;
 
     Uri imageUri;
 
@@ -68,6 +72,8 @@ public class ClassifyFragment extends Fragment {
         addImage = view.findViewById(R.id.add_image);
         classifyButton = view.findViewById(R.id.classify_button);
 
+        llmProvider = new LLMProvider();
+
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
@@ -90,29 +96,24 @@ public class ClassifyFragment extends Fragment {
         classifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imageUri == null)
-                    return;
-                try {
-                    InputStream inputStream = getContext().getContentResolver().openInputStream(imageUri);
-                    BufferedSource source = Okio.buffer(Okio.source(inputStream));
-                    byte[] bytes = source.readByteArray();
-                    source.close();
-
-
-                    RequestBody requestFile = RequestBody.create(
-                            MediaType.parse(getContext().getContentResolver().getType(imageUri)),
-                            bytes
-                    );
-                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "upload.jpg", requestFile);
-
-
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                Log.d("ClassifyFragment", "clicked");
+                if(!llmProvider.isInitalised()) {
+                    Log.d("ClassifyFragment", "initing");
+                    llmProvider.ititalise("Meow", imageUri, LLMProvider.PROVIDERS.WEB, getContext());
                 }
+
+                Function<String, Void> wrapperFuction = (input) -> {
+                  messageResponse(input);
+                  return null;
+                };
+
+                llmProvider.sendMessage(wrapperFuction);
             }
         });
 
+    }
+
+    private void messageResponse(String message) {
+        Log.d("Meow", message);
     }
 }

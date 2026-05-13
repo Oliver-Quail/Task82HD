@@ -6,7 +6,7 @@ import ollama
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "gemma4:e2b" 
-UPLOAD_FOLDER = './UPLOADS/'
+UPLOAD_FOLDER = './static/'
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -27,7 +27,7 @@ def generate_classification(text, image):
         {
             'role': 'user',
             'content': prompt,
-            'images': ["http://192.168.50.179:5000/UPLOADS/" + image]
+            'images': ["http://192.168.50.179:5000/static/" + image]
         },
     ])
 
@@ -48,21 +48,21 @@ def filter(prompt):
     
 @app.route("/classify", methods=['POST'])
 def classify_file():
-
-    description = request.args.get('description')
-
-    if not filter(description):
-        return 404
+    print("classifed fiel recieved")
     
-    if "file" not in request.files["file"]:
+    
+    
+    if "image" not in request.files:
         return 404
-    file = request.files['file']
+    file = request.files['image']
+    print("file found")
     filename = file.filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
     
 
     
-    return jsonify({'classification': generate_classification(description, filename)}), 200
+    return jsonify({'classification': generate_classification("Meow", filename)}), 200
 
     
 
