@@ -62,7 +62,7 @@ def classify_file():
     
 
     
-    return jsonify({'quiz': generate_classification(description, filename)}), 200
+    return jsonify({'classification': generate_classification(description, filename)}), 200
 
     
 
