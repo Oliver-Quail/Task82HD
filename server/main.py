@@ -4,12 +4,16 @@ import re
 import requests
 import ollama
 
-app = Flask(__name__)
-
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "gemma4:e2b" 
+UPLOAD_FOLDER = './UPLOADS/'
 
-def generate_classification(student_topic):
+app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+
+def generate_classification(text, image):
     print("Fetching quiz from Ollama")
 
     prompt = (
@@ -23,6 +27,7 @@ def generate_classification(student_topic):
         {
             'role': 'user',
             'content': prompt,
+            'images': ["http://192.168.50.179:5000/UPLOADS/" + image]
         },
     ])
 
@@ -41,7 +46,25 @@ def filter(prompt):
     
     return True
     
+@app.route("/classify", methods=['POST'])
+def classify_file():
 
+    description = request.args.get('description')
+
+    if not filter(description):
+        return 404
+    
+    if "file" not in request.files["file"]:
+        return 404
+    file = request.files['file']
+    filename = file.filename
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    
+
+    
+    return jsonify({'quiz': generate_classification(description, filename)}), 200
+
+    
 
 
 
