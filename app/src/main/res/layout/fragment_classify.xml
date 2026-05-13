@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/margin_small"
         android:background="@drawable/background"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:id="@+id/add_image">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_small"
+        android:id="@+id/classify_button"
         android:text="Classify"/>
 
 </LinearLayout>
