@@ -23,7 +23,7 @@ def generate_classification(text, image):
     prompt = (
         f"Classify the following, using an image if avaliable and text. Respond with what bin it should be disposed of in.\n"
         f"For green waste, respond green"
-        f""
+        f"Information provided by user: " + text
     )
 
 
@@ -53,7 +53,8 @@ def filter(prompt):
 @app.route("/classify", methods=['POST'])
 def classify_file():
     print("classifed fiel recieved")
-    
+
+    description = request.form.get("description")
     
     
     if "image" not in request.files:
@@ -66,7 +67,7 @@ def classify_file():
     
 
     
-    return jsonify({'classification': generate_classification("Meow", "./static/" + filename)}), 200
+    return jsonify({'classification': generate_classification(description, "./static/" + filename)}), 200
 
     
 

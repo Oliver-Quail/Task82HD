@@ -67,7 +67,7 @@ public class WebProvider extends ILLMProvider {
 
 
             LLMWebService service = retrofit.create(LLMWebService.class);
-            RequestBody description = RequestBody.create(MultipartBody.FORM, "Image to classify");
+            RequestBody description = RequestBody.create(MediaType.parse("text/plain"), message);
 
             Call<LLMResponse> result = service.classify(file, description);
 

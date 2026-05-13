@@ -15,6 +15,6 @@ public interface LLMWebService {
 
     @Multipart
     @POST("classify")
-    Call<LLMResponse> classify(@Part MultipartBody.Part image, @Part("imageData") RequestBody imageData);
+    Call<LLMResponse> classify(@Part MultipartBody.Part image, @Part("description") RequestBody description);
 
 }
