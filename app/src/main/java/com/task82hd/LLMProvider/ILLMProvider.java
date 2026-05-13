@@ -5,12 +5,17 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public interface ILLMProvider {
+public abstract class ILLMProvider {
+    protected String message;
+    protected Uri image;
 
-    public void initilaise(String message, Uri image);
+    public void initilaise(String message, Uri image) {
+        this.message = message;
+        this.image = image;
+    }
 
-    public void sendMessage(String message, Function<String, Void> callback);
+    public abstract void sendMessage(String message, Function<String, Void> callback);
 
-    public void sendMessage(Function<String, Void> callback);
+    public abstract void sendMessage(Function<String, Void> callback);
 
 }
