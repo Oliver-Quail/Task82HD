@@ -22,7 +22,8 @@ def generate_classification(text, image):
 
     prompt = (
         f"Classify the following, using an image if avaliable and text. Respond with what bin it should be disposed of in.\n"
-        f"For green waste, respond green"
+        f"E.g. Green, Yellow, Read, Blue ect"
+        f"If you require more information on the object, please respond by asking a question"
         f"Information provided by user: " + text
     )
 
