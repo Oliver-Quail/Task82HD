@@ -61,6 +61,7 @@ def classify_file():
     if "image" not in request.files:
         return 404
     file = request.files['image']
+    print(description)
     print("file found")
     filename = file.filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

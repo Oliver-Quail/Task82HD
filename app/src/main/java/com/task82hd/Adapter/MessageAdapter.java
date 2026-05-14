@@ -1,21 +1,16 @@
 package com.task82hd.Adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.task82hd.R;
 import com.task82hd.Database.Entity.Message;

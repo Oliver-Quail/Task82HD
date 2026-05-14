@@ -42,12 +42,18 @@
                 android:text="@string/add_image"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/chat_recycler"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/more_info"
         android:paddingStart="@dimen/standard_padding"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -67,5 +73,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:id="@+id/classify_button"
         android:text="Classify"/>
+
+
 
 </LinearLayout>

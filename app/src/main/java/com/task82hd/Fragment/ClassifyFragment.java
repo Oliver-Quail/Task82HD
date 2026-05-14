@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,12 +19,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.task82hd.Adapter.MessageAdapter;
+import com.task82hd.Database.Entity.Message;
 import com.task82hd.LLMProvider.LLMProvider;
 import com.task82hd.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.function.Function;
 
 import okhttp3.MediaType;
@@ -39,6 +44,10 @@ public class ClassifyFragment extends Fragment {
     TextInputEditText informationText;
 
     LLMProvider llmProvider;
+
+    RecyclerView chatRecycler;
+
+    ArrayList<Message> messages;
 
     Uri imageUri;
 
@@ -71,14 +80,18 @@ public class ClassifyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         addImage = view.findViewById(R.id.add_image);
         classifyButton = view.findViewById(R.id.classify_button);
-
+        informationText = view.findViewById(R.id.information_text);
+        chatRecycler = view.findViewById(R.id.chat_recycler);
         llmProvider = new LLMProvider();
+
+        messages = new ArrayList<>();
 
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
+
                     } else {
                         Log.d("PhotoPicker", "No media selected");
                     }
@@ -98,8 +111,13 @@ public class ClassifyFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("ClassifyFragment", "clicked");
                 if(!llmProvider.isInitalised()) {
+                    Message message = new Message();
+                    message.setContents(informationText.getText().toString());
+                    message.setAi(false);
+                    messages.add(message);
+                    updateChat();
                     Log.d("ClassifyFragment", "initing");
-                    llmProvider.ititalise("Meow", imageUri, LLMProvider.PROVIDERS.WEB, getContext());
+                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.WEB, getContext());
                 }
 
                 Function<String, Void> wrapperFuction = (input) -> {
@@ -114,6 +132,16 @@ public class ClassifyFragment extends Fragment {
     }
 
     private void messageResponse(String message) {
-        Log.d("Meow", message);
+        Message newMessage = new Message();
+        newMessage.setContents(message);
+        newMessage.setAi(true);
+        messages.add(newMessage);
+        updateChat();
+
+    }
+
+    private void updateChat() {
+        MessageAdapter messageAdapter = new MessageAdapter(requireContext(), messages);
+        chatRecycler.setAdapter(messageAdapter);
     }
 }
