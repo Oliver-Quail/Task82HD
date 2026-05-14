@@ -17,12 +17,22 @@
         android:name="com.task82hd.Fragment.HistoryFragment"
         tools:layout="@layout/fragment_history">
 
+        <action
+            android:id="@+id/view_history"
+            app:destination="@+id/view_history_fragment"/>
+
     </fragment>
 
     <fragment
         android:id="@+id/settings_fragment"
         android:name="com.task82hd.Fragment.SettingsFragment"
         tools:layout="@layout/fragment_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/view_history_fragment"
+        android:name="com.task82hd.Fragment.ViewHistoryFragment"
+        tools:layout="@layout/fragment_view_history">
 
     </fragment>
 
