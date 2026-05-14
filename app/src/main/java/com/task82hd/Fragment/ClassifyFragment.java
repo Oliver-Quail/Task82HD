@@ -1,5 +1,9 @@
 package com.task82hd.Fragment;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +29,12 @@ import com.task82hd.Database.Entity.Message;
 import com.task82hd.LLMProvider.LLMProvider;
 import com.task82hd.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -88,9 +96,38 @@ public class ClassifyFragment extends Fragment {
 
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
+                        Uri imageSelected = saveFileToInternalStorage(imageUri);
+
+
+                        Context context = requireContext();
+                        requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.DISPLAY_NAME, "image_" + System.currentTimeMillis() + ".jpg");
+                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                        values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/MyApp");
+
+
+                        Uri newUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                        try {
+                            OutputStream out = context.getContentResolver().openOutputStream(newUri);
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageSelected);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                out.close();
+                                imageUri = newUri;
+
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     } else {
                         Log.d("PhotoPicker", "No media selected");
@@ -143,5 +180,28 @@ public class ClassifyFragment extends Fragment {
     private void updateChat() {
         MessageAdapter messageAdapter = new MessageAdapter(requireContext(), messages);
         chatRecycler.setAdapter(messageAdapter);
+    }
+
+    private Uri saveFileToInternalStorage(Uri uri) {
+        File destinationFile = null;
+        try {
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
+
+            destinationFile = new File(requireContext().getFilesDir(), "picked_media_" + System.currentTimeMillis() + ".jpg");
+
+            try (OutputStream outputStream = new FileOutputStream(destinationFile)) {
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = inputStream.read(buf)) > 0) {
+                    outputStream.write(buf, 0, len);
+                }
+            }
+            inputStream.close();
+            Log.d("SaveFile", "File saved at: " + destinationFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Uri.parse(destinationFile.toURI().toString());
     }
 }
