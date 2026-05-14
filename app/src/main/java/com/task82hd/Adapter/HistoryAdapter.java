@@ -1,6 +1,7 @@
 package com.task82hd.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.task82hd.Database.Entity.Chat;
@@ -39,13 +42,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
     @Override
     public void onBindViewHolder(@NonNull HistoryAdapter.HistoryHolder holder, int position) {
         holder.nameText.setText(chats.get(position).getName());
+        holder.chatId = chats.get(position).chatId;
 
-        holder.viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 
@@ -58,6 +56,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
 
         TextView nameText;
         Button viewButton;
+        int chatId;
 
         public HistoryHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +64,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
             nameText = itemView.findViewById(R.id.name_text);
             viewButton = itemView.findViewById(R.id.view_button);
 
+            viewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("chatId", chatId);
+                    NavController navController = Navigation.findNavController(itemView);
+                    navController.navigate(R.id.view_history);
+                }
+            });
         }
 
 
