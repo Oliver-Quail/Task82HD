@@ -70,7 +70,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
                     Bundle bundle = new Bundle();
                     bundle.putInt("chatId", chatId);
                     NavController navController = Navigation.findNavController(itemView);
-                    navController.navigate(R.id.view_history);
+                    navController.navigate(R.id.view_history, bundle);
                 }
             });
         }
