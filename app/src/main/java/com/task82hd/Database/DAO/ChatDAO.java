@@ -17,4 +17,7 @@ public interface ChatDAO {
 
     @Query("SELECT * FROM chat")
     public abstract List<Chat> getChats();
+
+    @Query("SELECT * FROM chat WHERE chatId = :chatId LIMIT 1")
+    public abstract Chat getChat(int chatId);
 }
