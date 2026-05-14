@@ -32,13 +32,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
     @Override
     public HistoryAdapter.HistoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.fragment_history, parent, false);
+        View view = inflater.inflate(R.layout.recycler_history, parent, false);
         return new HistoryAdapter.HistoryHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HistoryAdapter.HistoryHolder holder, int position) {
-        holder.nameText.setText(chats.get(position).name);
+        holder.nameText.setText(chats.get(position).getName());
 
         holder.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
