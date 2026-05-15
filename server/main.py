@@ -29,8 +29,8 @@ def generate_classification(text, image):
 
     prompt = (
         f"Classify the following, using an image if avaliable and text. Respond with what bin it should be disposed of in or a question if you need more information"
-        f"Respond in this format of BIN + [details] if classifying colour or QUESTION + [your question] if you want to ask a question"
-        f"Example bins E.g. Green, Yellow, Read, Blue ect"
+        f"Respond in this format of 'BIN:You should dispose of [item name] in the [BIN] bin' if classifying colour or 'QUESTION :[your question]' if you want to ask a question"
+        f"The detail for the bins should be one of Green - organics, Yellow - recyclable plastic, Red - general waste, Blue - papaer "
         f""
         f"Information provided by user: " + gaurdPrompt(text)
 
