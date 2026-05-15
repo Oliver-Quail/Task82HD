@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.task82hd.Adapter.MessageAdapter;
 import com.task82hd.Database.AppDatabase;
 import com.task82hd.Database.Entity.Chat;
 import com.task82hd.Database.Entity.Message;
@@ -79,6 +82,18 @@ public class ViewHistoryFragment extends Fragment {
 
         chatName.setText(chat.name);
         itemImage.setImageURI(Uri.parse(chat.image));
+
+        MessageAdapter messageAdapter = new MessageAdapter(requireContext(), messages);
+
+        chatRecyler.setAdapter(messageAdapter);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(view);
+                navController.popBackStack();
+            }
+        });
 
 
     }
