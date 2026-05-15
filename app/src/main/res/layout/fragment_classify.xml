@@ -13,8 +13,8 @@
         android:text="@string/classify_nav"
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
-        android:paddingStart="@dimen/standard_padding"
-        android:background="@drawable/background"/>
+        style="@style/App.Title"
+        android:paddingStart="@dimen/standard_padding"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,14 +39,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/md_theme_primary"
                 android:text="@string/add_image"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginTop="@dimen/margin_large"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:id="@+id/chat_recycler"/>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:trackColor="@color/md_theme_surfaceContainer"
+        app:indicatorColor="@color/md_theme_primary"
+        android:layout_margin="@dimen/margin_small"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        android:id="@+id/loading_bar"/>
 
     <TextView
         android:layout_width="wrap_content"

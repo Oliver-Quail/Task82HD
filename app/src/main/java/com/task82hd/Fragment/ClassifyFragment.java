@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.task82hd.Adapter.MessageAdapter;
@@ -50,6 +51,7 @@ public class ClassifyFragment extends Fragment {
     ConstraintLayout addImage;
     Button classifyButton;
     TextInputEditText informationText;
+    ProgressBar loadingBar;
 
     LLMProvider llmProvider;
 
@@ -90,6 +92,8 @@ public class ClassifyFragment extends Fragment {
         classifyButton = view.findViewById(R.id.classify_button);
         informationText = view.findViewById(R.id.information_text);
         chatRecycler = view.findViewById(R.id.chat_recycler);
+        loadingBar = view.findViewById(R.id.loading_bar);
+
         llmProvider = new LLMProvider();
 
         messages = new ArrayList<>();
@@ -153,11 +157,13 @@ public class ClassifyFragment extends Fragment {
                     message.setAi(false);
                     messages.add(message);
                     updateChat();
+                    loadingBar.setVisibility(View.VISIBLE);
                     Log.d("ClassifyFragment", "initing");
                     llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.WEB, getContext());
                 }
 
                 Function<String, Void> wrapperFuction = (input) -> {
+                    loadingBar.setVisibility(View.INVISIBLE);
                   messageResponse(input);
                   return null;
                 };
