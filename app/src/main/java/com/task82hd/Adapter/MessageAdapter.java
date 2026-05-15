@@ -46,7 +46,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
             params.gravity = Gravity.END;
 
             holder.messageText.setLayoutParams(params);
-            holder.timeSent.setLayoutParams(params);
         }
     }
 
@@ -57,13 +56,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
 
     public static class MessageHolder extends RecyclerView.ViewHolder {
         TextView messageText;
-        TextView timeSent;
-
         public MessageHolder(@NonNull View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.message_text);
-            timeSent = itemView.findViewById(R.id.time_sent);
 
         }
 
