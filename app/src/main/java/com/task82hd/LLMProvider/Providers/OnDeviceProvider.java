@@ -31,6 +31,7 @@ import java.util.function.Function;
 public class OnDeviceProvider extends ILLMProvider {
 
     Conversation conversation;
+    String systemPrompt;
 
     @Override
     public void initilaise(String message, Uri image, Context context) {
@@ -43,11 +44,17 @@ public class OnDeviceProvider extends ILLMProvider {
 
         String[] directoryToCheck = context.fileList();
 
-        Log.d("DeviceProvider", directoryToCheck.toString());
+        try {
+            InputStream systemPromptStream = assetManager.open("system_prompt.txt");
+            byte[] buffer = new byte[1024];
+            systemPromptStream.read(buffer);
+            systemPrompt = new String(buffer, "UTF-8");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
-
-        if(!Arrays.asList(directoryToCheck).contains("A")) {
+        if(!Arrays.asList(directoryToCheck).contains("gemma_4_e2b_it.litertlm")) {
             try {
                 InputStream model = assetManager.open(modelName);
 
@@ -113,7 +120,7 @@ public class OnDeviceProvider extends ILLMProvider {
 
         Message res = conversation.sendMessage(Contents.Companion.of(
                 //new Content.ImageFile(image.toString()),
-                new Content.Text(message)
+                new Content.Text(systemPrompt + message)
         ), extraContent);
 
         callback.apply(res.getContents().toString());
