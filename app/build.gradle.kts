@@ -53,4 +53,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.8.8")
     implementation("androidx.navigation:navigation-ui:2.9.7")
     implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 }
