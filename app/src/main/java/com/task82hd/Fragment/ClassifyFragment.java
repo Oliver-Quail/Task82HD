@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -105,10 +110,9 @@ public class ClassifyFragment extends Fragment {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         Uri imageSelected = saveFileToInternalStorage(imageUri);
-
+                        imageUri = imageSelected;
 
                         Context context = requireContext();
-                        requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
 
                         ContentValues values = new ContentValues();
@@ -118,13 +122,15 @@ public class ClassifyFragment extends Fragment {
 
 
                         Uri newUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                        requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
                         try {
                             OutputStream out = context.getContentResolver().openOutputStream(newUri);
                             try {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageSelected);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                                 out.close();
-                                imageUri = newUri;
+                                //imageUri = newUri;
 
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -190,6 +196,20 @@ public class ClassifyFragment extends Fragment {
 
     private Uri saveFileToInternalStorage(Uri uri) {
         File destinationFile = null;
+
+       /* try {
+            String filename = "picked_media_" + System.currentTimeMillis() + ".jpg";
+            FileOutputStream image = requireContext().openFileOutput(filename, Context.MODE_PRIVATE);
+            URI temp = new URI(uri.toString());
+            image.write(Files.readAllBytes(Paths.get(temp)));
+            image.close();
+            return
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }*/
+
         try {
             InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
 

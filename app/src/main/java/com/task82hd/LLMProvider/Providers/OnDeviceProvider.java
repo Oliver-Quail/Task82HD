@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ public class OnDeviceProvider extends ILLMProvider {
 
     Conversation conversation;
     String systemPrompt;
+    String dir;
 
     @Override
     public void initilaise(String message, Uri image, Context context) {
@@ -39,6 +42,9 @@ public class OnDeviceProvider extends ILLMProvider {
 
         AssetManager assetManager = context.getAssets();
 
+        dir = context.getFilesDir().getPath();
+
+        Log.d("aaa", dir);
         //assetManager.
         String modelName = "gemma_4_e2b_it.litertlm";
 
@@ -81,7 +87,7 @@ public class OnDeviceProvider extends ILLMProvider {
         EngineConfig config = new EngineConfig(
                 modelPath,
                 new Backend.CPU(),
-                null,
+                new Backend.CPU(),
                 null,
                 null,
                 null,
@@ -118,14 +124,42 @@ public class OnDeviceProvider extends ILLMProvider {
     public void sendMessage(String message, Function<String, Void> callback) {
         Map<String, String> extraContent = Map.of();
 
-        Message res = conversation.sendMessage(Contents.Companion.of(
-                //new Content.ImageFile(image.toString()),
-                new Content.Text(systemPrompt + message)
-        ), extraContent);
+        File temp = new File(context.getFilesDir(), "picked_media_1778919930173.jpg");
 
-        callback.apply(res.getContents().toString());
+        String fileName = image.getPath().substring(image.getPath().lastIndexOf('/') + 1);
 
-        Log.d("OnDeviceLLMProvider", res.getContents().toString());
+        String imageLocation = context.getFilesDir().getPath() + "/picked_media_1778919930173.jpg" ;
+        File imageBinary = context.getFileStreamPath(fileName);
+
+        String[] directory = context.fileList();
+
+        Log.d("aaa", Arrays.asList(directory).toString());
+
+        Log.d("aaa", fileName);
+        Log.d("aaa", String.valueOf(imageBinary.exists()));
+        Log.d("aaa", image.toString());
+        Log.d("aaa", image.toString());
+        Log.d("aaa", String.valueOf(imageBinary.length()));
+
+
+
+        if(temp.exists()) {
+            Log.d("OnDeviceProvider", "file exists");
+        }
+        try {
+
+
+            Message res = conversation.sendMessage(Contents.Companion.of(
+                    new Content.ImageBytes(Files.readAllBytes(Paths.get(imageBinary.getAbsolutePath()))),
+                    new Content.Text(systemPrompt + message)
+            ), extraContent);
+            callback.apply(res.getContents().toString());
+
+            Log.d("OnDeviceLLMProvider", res.getContents().toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
