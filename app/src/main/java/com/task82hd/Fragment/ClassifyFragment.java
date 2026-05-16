@@ -159,7 +159,7 @@ public class ClassifyFragment extends Fragment {
                     updateChat();
                     loadingBar.setVisibility(View.VISIBLE);
                     Log.d("ClassifyFragment", "initing");
-                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.WEB, getContext());
+                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.LOCAL, getContext());
                 }
 
                 Function<String, Void> wrapperFuction = (input) -> {
