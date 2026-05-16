@@ -65,6 +65,7 @@ public class ClassifyFragment extends Fragment {
     ArrayList<Message> messages;
 
     Uri imageUri;
+    String imageName;
 
     public ClassifyFragment() {
         // Required empty public constructor
@@ -110,7 +111,6 @@ public class ClassifyFragment extends Fragment {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         Uri imageSelected = saveFileToInternalStorage(imageUri);
-                        imageUri = imageSelected;
 
                         Context context = requireContext();
 
@@ -130,7 +130,7 @@ public class ClassifyFragment extends Fragment {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageSelected);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                                 out.close();
-                                //imageUri = newUri;
+                                imageUri = newUri;
 
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -165,7 +165,7 @@ public class ClassifyFragment extends Fragment {
                     updateChat();
                     loadingBar.setVisibility(View.VISIBLE);
                     Log.d("ClassifyFragment", "initing");
-                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.LOCAL, getContext());
+                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.LOCAL, getContext(), imageName);
                 }
 
                 Function<String, Void> wrapperFuction = (input) -> {
@@ -197,23 +197,11 @@ public class ClassifyFragment extends Fragment {
     private Uri saveFileToInternalStorage(Uri uri) {
         File destinationFile = null;
 
-       /* try {
-            String filename = "picked_media_" + System.currentTimeMillis() + ".jpg";
-            FileOutputStream image = requireContext().openFileOutput(filename, Context.MODE_PRIVATE);
-            URI temp = new URI(uri.toString());
-            image.write(Files.readAllBytes(Paths.get(temp)));
-            image.close();
-            return
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
-        }*/
 
         try {
             InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
-
-            destinationFile = new File(requireContext().getFilesDir(), "picked_media_" + System.currentTimeMillis() + ".jpg");
+            imageName = "picked_media_" + System.currentTimeMillis() + ".jpg";
+            destinationFile = new File(requireContext().getFilesDir(), imageName);
 
             try (OutputStream outputStream = new FileOutputStream(destinationFile)) {
                 byte[] buf = new byte[1024];

@@ -22,9 +22,11 @@ public class LLMProvider {
     PROVIDERS providers;
     Context context;
     boolean isInitalised = false;
+    String imageName;
 
     AppDatabase db;
     long chatId;
+
 
     public boolean isInitalised() {
         return isInitalised;
@@ -37,11 +39,12 @@ public class LLMProvider {
 
     }
 
-    public void ititalise(String message, Uri image, PROVIDERS providers, Context context) {
+    public void ititalise(String message, Uri image, PROVIDERS providers, Context context, String imageName) {
         this.initalMessage = message;
         this.image = image;
         this.providers = providers;
         this.context = context;
+        this.imageName = imageName;
         isInitalised = true;
 
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
@@ -57,7 +60,7 @@ public class LLMProvider {
                 break;
             case LOCAL:
                 Log.d("LLMProvider", "Inititalised local");
-                provider = new OnDeviceProvider();
+                provider = new OnDeviceProvider(imageName);
                 break;
             default:
                 throw new RuntimeException("Invalid provider");

@@ -36,6 +36,11 @@ public class OnDeviceProvider extends ILLMProvider {
     String systemPrompt;
     String dir;
 
+    String imageName;
+    public OnDeviceProvider(String imageName) {
+        this.imageName = imageName;
+    }
+
     @Override
     public void initilaise(String message, Uri image, Context context) {
         super.initilaise(message, image, context);
@@ -123,19 +128,14 @@ public class OnDeviceProvider extends ILLMProvider {
     @Override
     public void sendMessage(String message, Function<String, Void> callback) {
         Map<String, String> extraContent = Map.of();
+        Log.d("aaa", imageName);
+        File imageBinary = context.getFileStreamPath(imageName);
 
-        File temp = new File(context.getFilesDir(), "picked_media_1778919930173.jpg");
-
-        String fileName = image.getPath().substring(image.getPath().lastIndexOf('/') + 1);
-
-        String imageLocation = context.getFilesDir().getPath() + "/picked_media_1778919930173.jpg" ;
-        File imageBinary = context.getFileStreamPath(fileName);
 
         String[] directory = context.fileList();
 
         Log.d("aaa", Arrays.asList(directory).toString());
 
-        Log.d("aaa", fileName);
         Log.d("aaa", String.valueOf(imageBinary.exists()));
         Log.d("aaa", image.toString());
         Log.d("aaa", image.toString());
@@ -143,9 +143,7 @@ public class OnDeviceProvider extends ILLMProvider {
 
 
 
-        if(temp.exists()) {
-            Log.d("OnDeviceProvider", "file exists");
-        }
+
         try {
 
 
