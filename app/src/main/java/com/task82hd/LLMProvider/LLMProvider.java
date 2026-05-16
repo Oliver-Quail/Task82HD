@@ -9,6 +9,7 @@ import androidx.room.Room;
 import com.task82hd.Database.AppDatabase;
 import com.task82hd.Database.Entity.Chat;
 import com.task82hd.Database.Entity.Message;
+import com.task82hd.LLMProvider.Providers.OnDeviceProvider;
 import com.task82hd.LLMProvider.Providers.WebProvider;
 
 import java.net.URI;
@@ -53,6 +54,10 @@ public class LLMProvider {
             case WEB:
                 Log.d("LLMProvider", "Inititalised web");
                 provider = new WebProvider();
+                break;
+            case LOCAL:
+                Log.d("LLMProvider", "Inititalised local");
+                provider = new OnDeviceProvider();
                 break;
             default:
                 throw new RuntimeException("Invalid provider");
