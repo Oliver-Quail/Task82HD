@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -62,6 +63,8 @@ public class ClassifyFragment extends Fragment {
 
     RecyclerView chatRecycler;
 
+    ImageView userImage;
+
     ArrayList<Message> messages;
 
     Uri imageUri;
@@ -99,6 +102,7 @@ public class ClassifyFragment extends Fragment {
         informationText = view.findViewById(R.id.information_text);
         chatRecycler = view.findViewById(R.id.chat_recycler);
         loadingBar = view.findViewById(R.id.loading_bar);
+        userImage = view.findViewById(R.id.user_image);
 
         llmProvider = new LLMProvider();
 
@@ -131,6 +135,7 @@ public class ClassifyFragment extends Fragment {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                                 out.close();
                                 imageUri = newUri;
+                                userImage.setImageURI(newUri);
 
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -138,6 +143,7 @@ public class ClassifyFragment extends Fragment {
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
+
 
                     } else {
                         Log.d("PhotoPicker", "No media selected");

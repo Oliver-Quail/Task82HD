@@ -22,6 +22,7 @@
         android:background="@drawable/background"
         android:layout_height="200dp"
         android:id="@+id/add_image">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +43,11 @@
                 android:textColor="@color/md_theme_primary"
                 android:text="@string/add_image"/>
         </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/user_image"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
