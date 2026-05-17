@@ -13,8 +13,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.task82hd.Database.AppDatabase;
+import com.task82hd.Database.Entity.Misc;
+import com.task82hd.LLMProvider.LLMProvider;
 
 import java.util.Set;
 
@@ -44,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigation, navController);
 
+        AppDatabase db = Room.databaseBuilder(this.getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
+
+        if(db.miscDAO().getMisc() == null) {
+            Misc misc =  new Misc();
+            misc.mode = (Integer) LLMProvider.PROVIDERS.WEB.ordinal();
+            db.miscDAO().createMisc(misc);
+        }
 
 
     }
