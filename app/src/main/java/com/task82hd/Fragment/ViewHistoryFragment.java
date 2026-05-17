@@ -81,7 +81,7 @@ public class ViewHistoryFragment extends Fragment {
         ArrayList<Message> messages = new ArrayList<Message>(db.messageDAO().getMessagesByChat(chatId));
 
         chatName.setText(chat.name);
-        itemImage.setImageURI(Uri.parse(chat.image));
+        itemImage.setImageURI(Uri.parse(requireContext().getFilesDir().getPath() + "/" + chat.image));
 
         MessageAdapter messageAdapter = new MessageAdapter(requireContext(), messages);
 

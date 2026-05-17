@@ -49,7 +49,7 @@ public class LLMProvider {
 
         db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
         Chat chat = new Chat();
-        chat.image = image.toString();
+        chat.image = imageName;
         chat.name = "Unclassified";
         chatId = db.chatDAO().createChat(chat);
 
