@@ -12,4 +12,7 @@
     <string name="history_nav">History</string>
     <string name="settings_nav">Settings</string>
 
+    <string name="can_run_on_device">You can run models locally on your device</string>
+    <string name="cant_run_on_device">Sadly your device is not powerful enough to run offline</string>
+
 </resources>

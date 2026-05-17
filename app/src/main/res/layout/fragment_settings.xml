@@ -49,6 +49,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:background="@drawable/background_warning"
+        android:id="@+id/offline_mode_text"
+        android:padding="@dimen/standard_padding"
+        android:text="@string/cant_run_on_device"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
