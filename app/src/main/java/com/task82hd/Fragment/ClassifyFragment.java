@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -32,7 +33,9 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.task82hd.Adapter.MessageAdapter;
+import com.task82hd.Database.AppDatabase;
 import com.task82hd.Database.Entity.Message;
+import com.task82hd.Database.Entity.Misc;
 import com.task82hd.LLMProvider.LLMProvider;
 import com.task82hd.R;
 
@@ -144,6 +147,9 @@ public class ClassifyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                AppDatabase db = Room.databaseBuilder(requireContext().getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
+                Misc misc = db.miscDAO().getMisc();
+                LLMProvider.PROVIDERS provider = LLMProvider.PROVIDERS.values()[misc.mode];
 
                 statusText.setVisibility(View.VISIBLE);
                 loadingBar.setVisibility(View.VISIBLE);
@@ -157,8 +163,6 @@ public class ClassifyFragment extends Fragment {
                 Log.d("ClassifyFragment", "it");
 
                 Handler handler = new Handler(Looper.getMainLooper());
-
-                LLMProvider.PROVIDERS provider = LLMProvider.PROVIDERS.WEB;
 
                 if(provider == LLMProvider.PROVIDERS.WEB) {
                     if(!llmProvider.isInitalised()) {
