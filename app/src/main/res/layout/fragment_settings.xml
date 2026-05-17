@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingEnd="@dimen/standard_padding"
+            android:id="@+id/offline_mode_toggle"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

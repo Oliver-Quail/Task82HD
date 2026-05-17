@@ -10,18 +10,26 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.task82hd.Database.AppDatabase;
+import com.task82hd.Database.Entity.Misc;
+import com.task82hd.LLMProvider.LLMProvider;
 import com.task82hd.R;
 
 public class SettingsFragment extends Fragment {
 
     TextView offlineModeText;
+    SwitchMaterial offlineModeToggle;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -51,10 +59,38 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         offlineModeText = view.findViewById(R.id.offline_mode_text);
+        offlineModeToggle = view.findViewById(R.id.offline_mode_toggle);
         if(canRunLLMOnDevice()) {
             offlineModeText.setText(R.string.can_run_on_device);
             offlineModeText.setBackgroundResource(R.drawable.background);
         }
+        else {
+            offlineModeToggle.setClickable(false);
+        }
+
+        AppDatabase db = Room.databaseBuilder(requireContext().getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
+
+        Misc misc = db.miscDAO().getMisc();
+
+        if(LLMProvider.PROVIDERS.values()[misc.mode] == LLMProvider.PROVIDERS.WEB) {
+            offlineModeToggle.setChecked(false);
+        }
+        else {
+            offlineModeToggle.setChecked(true);
+        }
+
+        offlineModeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    db.miscDAO().setMode(LLMProvider.PROVIDERS.LOCAL.ordinal());
+                }
+                else {
+                    db.miscDAO().setMode(LLMProvider.PROVIDERS.WEB.ordinal());
+                }
+            }
+        });
+
     }
 
     public boolean canRunLLMOnDevice() {
