@@ -86,7 +86,7 @@ public class WebProvider extends ILLMProvider {
                 public void onFailure(Call<LLMResponse> call, Throwable t) {
                     Log.d("WebProvider", "response failed");
 
-                    Log.d("WebProvider", t.getMessage());
+                    callback.apply("Unable to reach server. Check your connection");
 
 
                 }
