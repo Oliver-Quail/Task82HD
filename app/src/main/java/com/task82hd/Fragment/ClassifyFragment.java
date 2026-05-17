@@ -114,35 +114,8 @@ public class ClassifyFragment extends Fragment {
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
-                        Uri imageSelected = saveFileToInternalStorage(imageUri);
+                        saveFileToInternalStorage(imageUri);
 
-                        Context context = requireContext();
-
-
-                        ContentValues values = new ContentValues();
-                        values.put(MediaStore.Images.Media.DISPLAY_NAME, "image_" + System.currentTimeMillis() + ".jpg");
-                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                        values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/MyApp");
-
-
-                        Uri newUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                        requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                        try {
-                            OutputStream out = context.getContentResolver().openOutputStream(newUri);
-                            try {
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageSelected);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                                out.close();
-                                imageUri = newUri;
-                                userImage.setImageURI(newUri);
-
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
 
 
                     } else {
