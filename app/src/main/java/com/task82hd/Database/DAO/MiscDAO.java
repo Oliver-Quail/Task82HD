@@ -17,4 +17,7 @@ public interface MiscDAO {
 
     @Query("UPDATE misc set mode = :mode")
     public abstract void setMode(int mode);
+
+    @Query("UPDATE misc SET hasAgreedToOnline = :consent")
+    public abstract void setConsent(boolean consent);
 }
