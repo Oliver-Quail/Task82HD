@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.task82hd.Database.AppDatabase;
 import com.task82hd.R;
@@ -22,6 +23,7 @@ public class PrivacyFragment extends Fragment {
 
     Button cancelButton;
     Button acceptButton;
+    Button closeButton;
 
     public PrivacyFragment() {
         // Required empty public constructor
@@ -51,15 +53,15 @@ public class PrivacyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         cancelButton = view.findViewById(R.id.cancel_button);
         acceptButton = view.findViewById(R.id.accept_button);
+        closeButton = view.findViewById(R.id.close_button);
 
-        NavController navController = Navigation.findNavController(view);
         AppDatabase db = Room.databaseBuilder(requireContext().getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db.miscDAO().setConsent(false);
-                navController.popBackStack();
+                Toast.makeText(requireContext(), "You rejected our privacy policy", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,6 +69,14 @@ public class PrivacyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 db.miscDAO().setConsent(true);
+                Toast.makeText(requireContext(), "You accepted our privacy policy", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(view);
                 navController.popBackStack();
             }
         });

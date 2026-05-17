@@ -19,11 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/privacy_policy"
+        android:layout_marginTop="@dimen/margin_large"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +35,7 @@
             app:layout_constraintEnd_toStartOf="@id/accept_button"
             android:backgroundTint="@color/md_theme_error"
             android:id="@+id/cancel_button"
-            android:text="Cancel"/>
+            android:text="Reject"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,5 +48,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:text="Cancel"
+        android:background="@drawable/background_primary"
+        android:id="@+id/close_button"/>
 
 </LinearLayout>
