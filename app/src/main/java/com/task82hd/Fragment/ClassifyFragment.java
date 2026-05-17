@@ -126,7 +126,7 @@ public class ClassifyFragment extends Fragment {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         saveFileToInternalStorage(imageUri);
-
+                        userImage.setImageURI(imageUri);
 
 
                     } else {
