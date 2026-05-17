@@ -24,8 +24,7 @@ def gaurdPrompt(text):
 def generate_classification(text, image):
     print("Classifying...")
 
-    if filter(text):
-        return 401
+
 
     prompt = (
         f"Classify the following, using an image if avaliable and text. Respond with what bin it should be disposed of in or a question if you need more information"
@@ -59,13 +58,7 @@ def generate_classification(text, image):
 
     return response.message.content
 
-def filter(prompt):
-    bannedPhrases = ["escape", "hack"]
-
-    if(prompt in bannedPhrases):
-        return True
     
-    return False
     
 @app.route("/classify", methods=['POST'])
 def classify_file():
