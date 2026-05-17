@@ -77,7 +77,8 @@ public class WebProvider extends ILLMProvider {
 
                     LLMResponse llmResponse = response.body();
                     Log.d("WebProvider", "response Recieved");
-                    callback.apply(llmResponse.getClassification());
+                    String processedResponse = llmResponse.getName() + "::::" + llmResponse.getClassification();
+                    callback.apply(processedResponse);
 
                 }
 

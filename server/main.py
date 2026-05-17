@@ -50,6 +50,7 @@ def generate_classification(text, image):
     data = response.message.content.split(":")
     
     if "QUESTION" in response.message.content:
+        print([True, data[2], data[1]])
         return [True, data[2], data[1]]
 
     if "BIN" in response.message.content:

@@ -77,13 +77,21 @@ public class LLMProvider {
 
 
         Function<String, Void> logingCallback = (input) -> {
+            String[] data = input.split("::::");
+            Log.d("LLMProvder", String.valueOf(data.length));
+            String tempData = "";
+            if(data.length == 2) {
+                Chat chat = db.chatDAO().getChat((int)chatId);
+                chat.name = data[0];
+                tempData = data[1];
+            }
             Message aiMessage = new Message();
             aiMessage.chatId = (int)chatId;
             aiMessage.isAi = true;
-            aiMessage.contents = input;
+            aiMessage.contents = tempData;
             db.messageDAO().createMessage(aiMessage);
 
-            callback.apply(input);
+            callback.apply(tempData);
 
             return null;
         };

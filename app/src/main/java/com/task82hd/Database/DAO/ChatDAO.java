@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.RawQuery;
+import androidx.room.Update;
 
 import com.task82hd.Database.Entity.Chat;
 
@@ -20,4 +21,7 @@ public interface ChatDAO {
 
     @Query("SELECT * FROM chat WHERE chatId = :chatId LIMIT 1")
     public abstract Chat getChat(int chatId);
+
+    @Update
+    public abstract void updateChat(Chat chat);
 }
