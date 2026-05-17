@@ -158,43 +158,63 @@ public class ClassifyFragment extends Fragment {
 
                 Handler handler = new Handler(Looper.getMainLooper());
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!llmProvider.isInitalised()) {
-                            //statusText.setVisibility(View.VISIBLE);
-                            loadingBar.setVisibility(View.VISIBLE);
-                            statusText.setText("Initialising...");
-                            Log.d("ClassifyFragment", "initing");
-                            llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.WEB, getContext(), imageName);
-                        }
-                        statusText.setText("Thinking...");
-                        Function<String, Void> wrapperFuction = (input) -> {
+                LLMProvider.PROVIDERS provider = LLMProvider.PROVIDERS.WEB;
 
-                            messageResponse(input);
-                            return null;
-                        };
-                        llmProvider.sendMessage(wrapperFuction);
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingBar.setVisibility(View.INVISIBLE);
-                                statusText.setVisibility(View.INVISIBLE);
-                                Message newMessage = new Message();
-                                newMessage.setContents(messageText);
-                                newMessage.setAi(true);
-                                messages.add(newMessage);
-                                updateChat();
-                            }
-                        });
+                if(provider == LLMProvider.PROVIDERS.WEB) {
+                    if(!llmProvider.isInitalised()) {
+                        prepLLM(LLMProvider.PROVIDERS.WEB);
                     }
-
-
-                }).start();
-
+                    loadingBar.setVisibility(View.VISIBLE);
+                    statusText.setText("Thinking...");
+                    Function<String, Void> wrapperFuction = (input) -> {
+                        messageResponse(input);
+                        cleanUI();
+                        return null;
+                    };
+                    llmProvider.sendMessage(wrapperFuction);
+                }
+                else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!llmProvider.isInitalised()) {
+                                prepLLM(LLMProvider.PROVIDERS.LOCAL);
+                            }
+                            loadingBar.setVisibility(View.VISIBLE);
+                            statusText.setText("Thinking...");
+                            Function<String, Void> wrapperFuction = (input) -> {
+                                messageResponse(input);
+                                return null;
+                            };
+                            llmProvider.sendMessage(wrapperFuction);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cleanUI();
+                                }
+                            });
+                        }
+                    }).start();
+                }
             }
         });
 
+    }
+
+    private void prepLLM(LLMProvider.PROVIDERS provider) {
+        loadingBar.setVisibility(View.VISIBLE);
+        statusText.setVisibility(View.VISIBLE);
+        statusText.setText("Initialising...");
+        llmProvider.ititalise(informationText.getText().toString(), imageUri, provider, getContext(), imageName);
+    }
+    private void cleanUI() {
+        loadingBar.setVisibility(View.INVISIBLE);
+        statusText.setVisibility(View.INVISIBLE);
+        Message newMessage = new Message();
+        newMessage.setContents(messageText);
+        newMessage.setAi(true);
+        messages.add(newMessage);
+        updateChat();
     }
 
     private void messageResponse(String message) {
