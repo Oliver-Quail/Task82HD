@@ -14,4 +14,7 @@ public interface MiscDAO {
 
     @Query("SELECT * FROM misc LIMIT 1")
     public abstract Misc getMisc();
+
+    @Query("UPDATE misc set mode = :mode")
+    public abstract void setMode(int mode);
 }
