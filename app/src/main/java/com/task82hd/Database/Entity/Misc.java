@@ -10,4 +10,5 @@ public class Misc {
     public int id;
 
     public int mode;
+    public boolean hasAgreedToOnline;
 }
