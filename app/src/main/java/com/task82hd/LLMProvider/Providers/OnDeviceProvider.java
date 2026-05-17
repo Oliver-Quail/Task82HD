@@ -128,20 +128,7 @@ public class OnDeviceProvider extends ILLMProvider {
     @Override
     public void sendMessage(String message, Function<String, Void> callback) {
         Map<String, String> extraContent = Map.of();
-        Log.d("aaa", imageName);
         File imageBinary = context.getFileStreamPath(imageName);
-
-
-        String[] directory = context.fileList();
-
-        Log.d("aaa", Arrays.asList(directory).toString());
-
-        Log.d("aaa", String.valueOf(imageBinary.exists()));
-        Log.d("aaa", image.toString());
-        Log.d("aaa", image.toString());
-        Log.d("aaa", String.valueOf(imageBinary.length()));
-
-
 
 
         try {
@@ -151,9 +138,14 @@ public class OnDeviceProvider extends ILLMProvider {
                     new Content.ImageBytes(Files.readAllBytes(Paths.get(imageBinary.getAbsolutePath()))),
                     new Content.Text(systemPrompt + message)
             ), extraContent);
-            callback.apply(res.getContents().toString());
-
             Log.d("OnDeviceLLMProvider", res.getContents().toString());
+            String[] data = res.getContents().toString().split(":");
+            String tempData = "";
+            if(data.length > 2) {
+                tempData = data[1].replace("BIN", "") + "::::" + data[2];
+            }
+            callback.apply(tempData);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

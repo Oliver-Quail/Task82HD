@@ -84,6 +84,10 @@ public class LLMProvider {
                 Chat chat = db.chatDAO().getChat((int)chatId);
                 chat.name = data[0];
                 tempData = data[1];
+                db.chatDAO().updateChat(chat);
+            }
+            else {
+                tempData = input;
             }
             Message aiMessage = new Message();
             aiMessage.chatId = (int)chatId;
