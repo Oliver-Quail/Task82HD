@@ -30,6 +30,10 @@ public class SettingsFragment extends Fragment {
 
     TextView offlineModeText;
     SwitchMaterial offlineModeToggle;
+    SwitchMaterial offDeviceProcessing;
+
+
+
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -60,6 +64,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         offlineModeText = view.findViewById(R.id.offline_mode_text);
         offlineModeToggle = view.findViewById(R.id.offline_mode_toggle);
+        offDeviceProcessing = view.findViewById(R.id.off_device_processing);
+
         if(canRunLLMOnDevice()) {
             offlineModeText.setText(R.string.can_run_on_device);
             offlineModeText.setBackgroundResource(R.drawable.background);
@@ -79,6 +85,14 @@ public class SettingsFragment extends Fragment {
             offlineModeToggle.setChecked(true);
         }
 
+        if(misc.hasAgreedToOnline) {
+            offDeviceProcessing.setChecked(true);
+
+        }
+        else {
+            offDeviceProcessing.setChecked(false);
+        }
+
         offlineModeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
@@ -87,6 +101,18 @@ public class SettingsFragment extends Fragment {
                 }
                 else {
                     db.miscDAO().setMode(LLMProvider.PROVIDERS.WEB.ordinal());
+                }
+            }
+        });
+
+        offDeviceProcessing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    db.miscDAO().setConsent(true);
+                }
+                else {
+                    db.miscDAO().setConsent(false);
                 }
             }
         });
