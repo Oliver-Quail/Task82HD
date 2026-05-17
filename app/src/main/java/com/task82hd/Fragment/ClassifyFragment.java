@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.task82hd.Adapter.MessageAdapter;
@@ -147,9 +148,21 @@ public class ClassifyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if(imageUri == null) {
+                    Toast.makeText(requireContext(), "Please supply an image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
                 AppDatabase db = Room.databaseBuilder(requireContext().getApplicationContext(), AppDatabase.class, "app-db").allowMainThreadQueries().build();
                 Misc misc = db.miscDAO().getMisc();
                 LLMProvider.PROVIDERS provider = LLMProvider.PROVIDERS.values()[misc.mode];
+
+                if(provider == LLMProvider.PROVIDERS.WEB && !misc.hasAgreedToOnline) {
+                    Toast.makeText(requireContext(), "Cannot process request. Please consent to privacy policy", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 statusText.setVisibility(View.VISIBLE);
                 loadingBar.setVisibility(View.VISIBLE);
