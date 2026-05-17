@@ -1,5 +1,6 @@
 package com.task82hd.Fragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,8 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.task82hd.Adapter.MessageAdapter;
@@ -58,6 +62,7 @@ public class ClassifyFragment extends Fragment {
     Button classifyButton;
     TextInputEditText informationText;
     ProgressBar loadingBar;
+    TextView statusText;
 
     LLMProvider llmProvider;
 
@@ -69,6 +74,7 @@ public class ClassifyFragment extends Fragment {
 
     Uri imageUri;
     String imageName;
+    String messageText;
 
     public ClassifyFragment() {
         // Required empty public constructor
@@ -103,7 +109,9 @@ public class ClassifyFragment extends Fragment {
         chatRecycler = view.findViewById(R.id.chat_recycler);
         loadingBar = view.findViewById(R.id.loading_bar);
         userImage = view.findViewById(R.id.user_image);
-
+        statusText = view.findViewById(R.id.status_text);
+        loadingBar.setVisibility(View.INVISIBLE);
+        statusText.setVisibility(View.INVISIBLE);
         llmProvider = new LLMProvider();
 
         messages = new ArrayList<>();
@@ -135,36 +143,62 @@ public class ClassifyFragment extends Fragment {
         classifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ClassifyFragment", "clicked");
-                if(!llmProvider.isInitalised()) {
-                    Message message = new Message();
-                    message.setContents(informationText.getText().toString());
-                    message.setAi(false);
-                    messages.add(message);
-                    updateChat();
-                    loadingBar.setVisibility(View.VISIBLE);
-                    Log.d("ClassifyFragment", "initing");
-                    llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.LOCAL, getContext(), imageName);
-                }
 
-                Function<String, Void> wrapperFuction = (input) -> {
-                    loadingBar.setVisibility(View.INVISIBLE);
-                  messageResponse(input);
-                  return null;
-                };
 
-                llmProvider.sendMessage(wrapperFuction);
+                statusText.setVisibility(View.VISIBLE);
+                loadingBar.setVisibility(View.VISIBLE);
+                statusText.setText("Initialising...");
+                Message message = new Message();
+                message.setContents(informationText.getText().toString());
+                message.setAi(false);
+                messages.add(message);
+
+                updateChat();
+                Log.d("ClassifyFragment", "it");
+
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!llmProvider.isInitalised()) {
+                            //statusText.setVisibility(View.VISIBLE);
+                            loadingBar.setVisibility(View.VISIBLE);
+                            statusText.setText("Initialising...");
+                            Log.d("ClassifyFragment", "initing");
+                            llmProvider.ititalise(informationText.getText().toString(), imageUri, LLMProvider.PROVIDERS.WEB, getContext(), imageName);
+                        }
+                        statusText.setText("Thinking...");
+                        Function<String, Void> wrapperFuction = (input) -> {
+
+                            messageResponse(input);
+                            return null;
+                        };
+                        llmProvider.sendMessage(wrapperFuction);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingBar.setVisibility(View.INVISIBLE);
+                                statusText.setVisibility(View.INVISIBLE);
+                                Message newMessage = new Message();
+                                newMessage.setContents(messageText);
+                                newMessage.setAi(true);
+                                messages.add(newMessage);
+                                updateChat();
+                            }
+                        });
+                    }
+
+
+                }).start();
+
             }
         });
 
     }
 
     private void messageResponse(String message) {
-        Message newMessage = new Message();
-        newMessage.setContents(message);
-        newMessage.setAi(true);
-        messages.add(newMessage);
-        updateChat();
+        this.messageText = message;
 
     }
 
