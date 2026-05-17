@@ -29,10 +29,9 @@ def generate_classification(text, image):
 
     prompt = (
         f"Classify the following, using an image if avaliable and text. Respond with what bin it should be disposed of in or a question if you need more information"
-        f"if you have any advice such as removing plastic wrapping from fruit place it in [Advice]"
-        f"Respond in this format of 'BIN:You should dispose of [item name] in the [BIN] bin. [Advice]' if classifying colour or 'QUESTION:[your question]' if you want to ask a question"
+        f"if you have any advice such as removing plastic wrapping from fruit place it in [Advice]. Advice should not contain the word advice or a ';'"
+        f"Respond in this format defined in the next sentence with all text in a single line. NAME:[item name] then 'BIN:You should dispose of [item name] in the [BIN] bin. [Advice]' or of you are not confient or need more infotion respond with 'QUESTION:[your question]' if you want to ask a question"
         f"The detail for the bins should be one of Green - organics, Yellow - recyclable plastic, Red - general waste, Blue - papaer "
-        f""
         f"Information provided by user: " + gaurdPrompt(text)
 
     )
@@ -48,13 +47,13 @@ def generate_classification(text, image):
 
     print(response.message.content)
 
-    data = response.message.content.split(":")[1]
+    data = response.message.content.split(":")
     
     if "QUESTION" in response.message.content:
-        return [True, data]
+        return [True, data[2], data[1]]
 
     if "BIN" in response.message.content:
-        return [False, data]
+        return [False, data[2], data[1]]
 
     return response.message.content
 
@@ -84,7 +83,7 @@ def classify_file():
     data = generate_classification(description, "./static/" + filename)
 
     
-    return jsonify({'classification': data[1], "isQuestion": data[0] }), 200
+    return jsonify({'classification': data[1], "isQuestion": data[0], "itemName": data[2] }), 200
 
     
 

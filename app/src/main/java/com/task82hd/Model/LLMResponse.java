@@ -10,6 +10,9 @@ public class LLMResponse {
     @SerializedName("isQuestion")
     private boolean isQuestion;
 
+    @SerializedName("itemName")
+    private String name;
+
     public String getClassification() {
         return classification;
     }
@@ -24,5 +27,13 @@ public class LLMResponse {
 
     public void setQuestion(boolean question) {
         isQuestion = question;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
