@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Task82HD</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Classify fragment -->
@@ -14,5 +13,8 @@
 
     <string name="can_run_on_device">You can run models locally on your device</string>
     <string name="cant_run_on_device">Sadly your device is not powerful enough to run offline</string>
+
+    <!-- Privacy Fragment -->
+    <string name="privacy_policy">By clicking agree you allow for images and text to be processed remotely by us. All files will be deleted within 24 hours after use</string>
 
 </resources>
