@@ -10,12 +10,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,7 +34,7 @@ public class SettingsFragment extends Fragment {
     TextView offlineModeText;
     SwitchMaterial offlineModeToggle;
     SwitchMaterial offDeviceProcessing;
-
+    Button privacyButton;
 
 
 
@@ -65,6 +68,7 @@ public class SettingsFragment extends Fragment {
         offlineModeText = view.findViewById(R.id.offline_mode_text);
         offlineModeToggle = view.findViewById(R.id.offline_mode_toggle);
         offDeviceProcessing = view.findViewById(R.id.off_device_processing);
+        privacyButton = view.findViewById(R.id.privacy_button);
 
         if(canRunLLMOnDevice()) {
             offlineModeText.setText(R.string.can_run_on_device);
@@ -114,6 +118,14 @@ public class SettingsFragment extends Fragment {
                 else {
                     db.miscDAO().setConsent(false);
                 }
+            }
+        });
+
+        privacyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.privacy_fragment);
             }
         });
 

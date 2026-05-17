@@ -36,4 +36,11 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/privacy_fragment"
+        android:name="com.task82hd.Fragment.PrivacyFragment"
+        tools:layout="@layout/fragment_privacy">
+
+    </fragment>
+
 </navigation>
